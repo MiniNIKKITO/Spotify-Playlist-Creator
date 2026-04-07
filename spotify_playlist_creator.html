@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spotify Playlist Sorter</title>
+</head>
+<body>
+  <h1>Spotify Playlist Sorter</h1>
+
+  <button onclick="login()">Login with Spotify</button>
+  <br><br>
+
+  <input type="text" id="playlistUrl" placeholder="Paste playlist link" size="50" />
+  <button onclick="transform()">Transform</button>
+
+  <p id="result"></p>
+
+  <script>
+    function login() {
+      window.location.href = 'http://localhost:3001/login';
+    }
+
+    async function transform() {
+      const playlistUrl = document.getElementById('playlistUrl').value;
+
+      const res = await fetch('http://localhost:3001/transform', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playlistUrl })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('result').innerHTML =
+          'Playlist created! <a target="_blank" href="https://open.spotify.com/playlist/' + data.playlistId + '">Open</a>';
+      } else {
+        document.getElementById('result').innerText = 'Error';
+      }
+    }
+  </script>
+</body>
+</html>
